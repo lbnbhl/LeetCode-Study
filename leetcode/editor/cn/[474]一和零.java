@@ -42,11 +42,67 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
 /*
-*
+*dp[i][j][k] 表示从[0,i]任意取若干数，有j个0，k个1时，最大取了多少个数
+* dp[i][j][k] = Math.max(dp[i-1][j][k],dp[i-1][j-a][k-b]+1)
+* a = str[i] 中 0 的个数，b = str[i]中 1 的个数
 * */
 class Solution {
     public int findMaxForm(String[] strs, int m, int n) {
-
+        int[][][] dp = new int[strs.length][m+1][n+1];
+        for (int i = 0; i < strs.length; i++) {
+            String str = strs[i];
+            char[] chars = str.toCharArray();
+            int a = 0, b = 0;
+            for (char c : chars) {
+                if (c == '0')
+                    a++;
+                else
+                    b++;
+            }
+            for (int j = 0; j <= m; j++) {
+                for (int k = 0; k <= n; k++) {
+                    if (j == 0 && k == 0)
+                        dp[i][j][k] = 0;
+                    else if (i == 0){
+                        if (j < a || k < b)
+                            dp[i][j][k] = 0;
+                        else
+                            dp[i][j][k] = 1;
+                    }else if (j < a || k < b){
+                        dp[i][j][k] = dp[i-1][j][k];
+                    }else
+                        dp[i][j][k] = Math.max(dp[i-1][j][k],dp[i-1][j-a][k-b]+1);
+                }
+            }
+        }
+        return dp[strs.length-1][m][n];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
+
+/*
+* 滚动数组
+* dp[j][k] = Math.max(dp[j][k],dp[j-a][k-b]+1)
+* */
+class Solution {
+    public int findMaxForm(String[] strs, int m, int n) {
+        int[][] dp = new int[m+1][n+1];
+        for (int i = 0; i < strs.length; i++) {
+            String str = strs[i];
+            char[] chars = str.toCharArray();
+            int a = 0, b = 0;
+            for (char c : chars) {
+                if (c == '0')
+                    a++;
+                else
+                    b++;
+            }
+            for (int j = m; j >= a; j--) {
+                for (int k = n; k >= b; k--) {
+                    dp[j][k] = Math.max(dp[j][k],dp[j-a][k-b]+1);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
