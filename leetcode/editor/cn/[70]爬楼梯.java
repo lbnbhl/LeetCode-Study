@@ -52,3 +52,21 @@ class Solution {
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
+/*
+* 完全背包，nums = {1,2},target = n;
+* dp[j] 表示target为j时，最多有多少种方法
+* dp[j] = dp[j - nums[i]]
+* */
+class Solution {
+    public int climbStairs(int n) {
+        int[] dp = new int[n+1];
+        dp[0] = 1;
+        for (int j = 0; j <= n; j++) {
+            for (int i = 1; i < 3; i++) {
+                if (j >= i)
+                    dp[j] = dp[j-i];
+            }
+        }
+        return dp[n];
+    }
+}
