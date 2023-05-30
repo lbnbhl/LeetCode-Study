@@ -44,7 +44,7 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int maxSubArray(int[] nums) {
+    public int maxSubArray1(int[] nums) {
         int sum = 0,max = nums[0];
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
@@ -53,6 +53,22 @@ class Solution {
                 sum = 0;
         }
         return max;
+    }
+
+    /*
+    * dp[i] 表示以nums[i]为结尾的连续子数组的最大和
+    * dp[i] = Math.max(dp[i-1] + nums[i],dp[i-1]);
+    * */
+    public int maxSubArray(int[] nums) {
+        int res = -10000;
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        res = Math.max(res,dp[0]);
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i-1] + nums[i],nums[i]);
+            res = Math.max(res,dp[i]);
+        }
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
